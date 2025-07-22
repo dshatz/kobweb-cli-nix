@@ -19,6 +19,7 @@
               url = "https://github.com/varabyte/kobweb-cli/releases/download/v${version}/kobweb-${version}.tar";
               sha256 = "sha256:1whz5qsqfbqickzafp6jpv0ckh39lr3ssqzksmgp5cwc6i38ff06";
             };
+            nativeBuildInputs = [ pkgs.makeWrapper ];
             unpackPhase = ''
               tar -xf $src "kobweb-${version}"
               mv "kobweb-${version}" source
@@ -28,6 +29,8 @@
               mkdir -p $out/bin
               cp -r source/* $out/
               chmod +x $out/bin/kobweb
+              wrapProgram $out/bin/kobweb \
+                --prefix PATH : ${pkgs.jdk17}/bin
             '';
             # Gradle dependency hash. Set to empty to rebuild.
           };
